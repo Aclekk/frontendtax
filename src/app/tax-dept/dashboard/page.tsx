@@ -221,13 +221,11 @@ export default function TaxDeptDashboardPage() {
 
                        {tab.value !== "new" && (
                          <TableCell className="text-right">
-                           {(tab.value === "downloaded" || tab.value === "sent") && (
+                           {tab.value === "downloaded" && (
                              <div className="flex justify-end gap-2">
-                               {tab.value === "downloaded" && (
-                                 <Button size="sm" onClick={() => handleOpenUpload(inv)}>
-                                   Upload FP
-                                 </Button>
-                               )}
+                               <Button size="sm" onClick={() => handleOpenUpload(inv)}>
+                                 Upload FP
+                               </Button>
                                <Button
                                  size="sm"
                                  variant="outline"
@@ -256,10 +254,25 @@ export default function TaxDeptDashboardPage() {
                              </div>
                            )}
 
+                           {tab.value === "sent" && (
+                             <Button
+                               size="sm"
+                               variant="outline"
+                               onClick={() => handleResend(inv.id)}
+                               disabled={
+                                 resendEmail.isPending ||
+                                 !fakturPajakIdByInvoiceId.has(inv.id)
+                               }
+                             >
+                               <Mail />
+                               {resendEmail.isPending ? "Resending..." : "Resend Email"}
+                             </Button>
+                           )}
+
                            {tab.value === "email_failed" && (
                              <Button size="sm" onClick={() => handleResend(inv.id)} disabled={resendEmail.isPending}>
                                <Mail />
-                               {resendEmail.isPending ? "Sending..." : "Resend"}
+                               {resendEmail.isPending ? "Resending..." : "Resend Email"}
                              </Button>
                            )}
                          </TableCell>
